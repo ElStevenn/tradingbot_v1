@@ -70,15 +70,29 @@ status: ## Ver estado del contenedor
 shell: ## Abrir shell en el contenedor
 	docker exec -it $(CONTAINER_NAME) /bin/bash
 
-test-connection: ## Probar conexión a Bitget (sin ejecutar bot)
-	@echo "🔍 Probando conexión a Bitget..."
-	docker run --rm \
-		-v $(PWD)/$(CONFIG_FILE):/app/conf.yaml:ro \
-		-e BITGET_API_KEY="$(BITGET_API_KEY)" \
-		-e BITGET_API_SECRET="$(BITGET_API_SECRET)" \
-		-e BITGET_API_PASSPHRASE="$(BITGET_API_PASSPHRASE)" \
-		$(IMAGE_NAME):latest \
-		python -c "from bot.bitget_client import BitgetClient; import yaml; config = yaml.safe_load(open('/app/conf.yaml')); client = BitgetClient(config['BITGET_API_KEY'], config['BITGET_API_SECRET'], config['BITGET_API_PASSPHRASE'], config.get('BITGET_SANDBOX', False)); print('✅ Conexión exitosa'"
+test: ## Probar conexión y configuración completa
+	@echo "🧪 Ejecutando tests de conexión y configuración..."
+	@if [ -f .env ]; then \
+		export $(cat .env | grep -v '^#' | xargs); \
+	fi
+	python test_connection.py
+
+test-docker: ## Probar conexión desde Docker
+	@echo "🧪 Ejecutando tests desde Docker..."
+	@if [ -f .env ]; then \
+		docker run --rm \
+			--env-file .env \
+			$(IMAGE_NAME):latest \
+			python test_connection.py; \
+	else \
+		docker run --rm \
+			-v $(PWD)/$(CONFIG_FILE):/app/conf.yaml:ro \
+			-e BITGET_API_KEY="$(BITGET_API_KEY)" \
+			-e BITGET_API_SECRET="$(BITGET_API_SECRET)" \
+			-e BITGET_API_PASSPHRASE="$(BITGET_API_PASSPHRASE)" \
+			$(IMAGE_NAME):latest \
+			python test_connection.py; \
+	fi
 
 setup: ## Crear archivo de configuración desde plantilla
 	@if [ ! -f $(CONFIG_FILE) ]; then \
