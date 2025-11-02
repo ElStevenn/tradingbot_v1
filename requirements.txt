@@ -1,1 +1,7 @@
 ccxt
+python-dotenv
+pytz
+pytest
+requests
+pyyaml
+schedule

@@ -1,0 +1,23 @@
+# Configuración del Bot de Trading
+# Copia este archivo a conf.yaml y completa con tus credenciales
+
+# Credenciales de Bitget API
+BITGET_API_KEY: "tu_api_key_aqui"
+BITGET_API_SECRET: "tu_api_secret_aqui"
+BITGET_API_PASSPHRASE: "tu_api_passphrase_aqui"
+
+# Modo sandbox (true para pruebas, false para producción)
+BITGET_SANDBOX: true  # CAMBIAR A false PARA PRODUCCIÓN
+
+# Configuración de Trading
+SYMBOL: "BTC/USDT:USDT"  # Símbolo para trading
+LEVERAGE: 25  # Apalancamiento
+INITIAL_CAPITAL_PCT: 0.35  # Porcentaje de capital a usar (base)
+STOP_LOSS_PCT: 0.02  # Stop loss en % (2%)
+
+# Logging
+LOG_PATH: "bot_log.jsonl"  # Ruta de archivo de logs
+
+# Configuración de la estrategia (opcional, usa valores por defecto si no se especifica)
+# Estos valores ya están en la estrategia, pero puedes ajustarlos aquí si lo necesitas
+

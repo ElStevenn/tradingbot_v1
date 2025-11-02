@@ -1,0 +1,29 @@
+# Trading Bot Configuration Template
+# Copy this file to config.yaml or set environment variables
+
+# Symbol and market (informational only in logs)
+symbol: "BTC/USDT:USDT"
+
+# Position sizing (fixed, no risk management)
+entry_notional_eur: 10.0
+leverage: 50
+
+# Time settings
+timeframe: "1m"  # Intraday candles (default: 1 minute)
+ny_open_tz: "America/New_York"
+
+# Trading window
+pre_open_window_min: 30  # Minutes before open to build range
+wait_after_open_min: 5   # Minutes to wait after open before evaluating signals
+
+# Signal validation
+volume_lookback: 20      # Candles to compare for relative volume
+retest_tolerance_pct: 0.1  # Tolerance for valid touch on range edge (0.1%)
+stop_buffer_pct: 0.05     # Small margin beyond range edge for stop (0.05%)
+
+# Session limits
+max_trades_per_session: 3
+
+# Logging
+log_path: "bot_log.jsonl"
+

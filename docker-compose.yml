@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  trading-bot:
+    build: .
+    container_name: auto-trader-bot
+    restart: always  # Reiniciar automáticamente si falla
+    volumes:
+      - ./logs:/app/logs  # Persistir logs
+      - ./conf.yaml:/app/conf.yaml:ro  # Configuración (solo lectura)
+    environment:
+      # Credenciales (desde variables de entorno del host)
+      - BITGET_API_KEY=${BITGET_API_KEY}
+      - BITGET_API_SECRET=${BITGET_API_SECRET}
+      - BITGET_API_PASSPHRASE=${BITGET_API_PASSPHRASE}
+      # Configuración
+      - BITGET_SANDBOX=${BITGET_SANDBOX:-true}
+      - SYMBOL=${SYMBOL:-BTC/USDT:USDT}
+      - LEVERAGE=${LEVERAGE:-25}
+      - INITIAL_CAPITAL_PCT=${INITIAL_CAPITAL_PCT:-0.35}
+      - STOP_LOSS_PCT=${STOP_LOSS_PCT:-0.02}
+      - LOG_PATH=/app/logs/bot_log.jsonl
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import os; exit(0 if os.path.exists('/app/logs/bot_log.jsonl') else 1)"]
+      interval: 5m
+      timeout: 30s
+      retries: 3
+      start_period: 1m
+
